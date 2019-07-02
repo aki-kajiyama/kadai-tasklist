@@ -1,57 +1,57 @@
 class TasksController < ApplicationController
+  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  
   def index
     @tasks = Task.all
   end
 
   def show
-    @tasks = Task.find(params[:id])
   end
 
   def new
-    @tasks = Task.new
+    @task = Task.new
   end
 
   def create
-    @tasks = Task.new(task_params)
+    @task = Task.new(task_params)
 
-    if @tasks.save
-      flash[:success] = 'Message が正常に投稿されました'
-      redirect_to @tasks
+    if @task.save
+      flash[:success] = 'Task が正常に投稿されました'
+      redirect_to @task
     else
-      flash.now[:danger] = 'Message が投稿されませんでした'
+      flash.now[:danger] = 'Task が投稿されませんでした'
       render :new
     end
   end
 
   def edit
-    @tasks = Task.find(params[:id])
   end
 
   def update
-    @tasks = Task.find(params[:id])
-
-    if @tasks.update(task_params)
-      flash[:success] = 'Message は正常に更新されました'
-      redirect_to @tasks
+    if @task.update(task_params)
+      flash[:success] = 'Task は正常に更新されました'
+      redirect_to @task
     else
-      flash.now[:danger] = 'Message は更新されませんでした'
+      flash.now[:danger] = 'Task は更新されませんでした'
       render :edit
     end
   end
 
   def destroy
-    @tasks = Task.find(params[:id])
-    @tasks.destroy
+    @task.destroy
 
-    flash[:success] = 'Message は正常に削除されました'
+    flash[:success] = 'Task は正常に削除されました'
     redirect_to tasks_url
   end
   
   private
+  
+  def set_task
+    @task = Task.find(params[:id])
+  end
 
   # Strong Parameter
   def task_params
-    params.require(:task).permit(:content)
+    params.require(:task).permit(:content, :status)
   end
-  
 end
